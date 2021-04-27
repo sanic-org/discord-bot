@@ -25,7 +25,8 @@ class IssueCog(commands.Cog):
                 return url, response.status
 
     @commands.command(aliases=['issue', 'i'])
-    async def get_issue(self, ctx: Context, number: int, repo: str = 'sanic'):
+    async def get_issue(self, ctx: Context, number: int, repo: str = None):
+        repo = 'sanic-' + repo if repo != 'sanic' else 'sanic'
         url, lookup_status = await self.lookup(number, repo)
         if lookup_status == 200:
             await success_message(ctx, 'Issue in ' + repo + ' found.\n' + url)
