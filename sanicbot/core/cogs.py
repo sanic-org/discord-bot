@@ -10,16 +10,16 @@ class GitCog(commands.Cog):
         self.bot = bot
         self.org_url = f'https://github.com/sanic-org/'
 
-    async def lookup(self, number: int, repo):
+    async def lookup(self, number: int, repo: str):
         """
         Lookup the issue and check if it exists within a repo found in the Sanic organization. Redirection to
         retrieve pull request is automatic due to the fact that Github issues them sequentially.
 
         :param number: Issue number
 
-        :param repo: Repository of issue being looked up
+        :param repo: Repository of issue being looked up.
 
-        :return: url, response_code
+        :return: url, response_code.
         """
         url = f'https://github.com/sanic-org/{repo}/issues/{number}'
         async with httpx.AsyncClient() as client:
@@ -27,7 +27,7 @@ class GitCog(commands.Cog):
             return str(response.url), response.status
 
     @commands.command(aliases=['git', 'gh'])
-    async def retrieve_git(self, ctx: Context, number: int, repo: str = 'sanic'):
+    async def retrieve_issue(self, ctx: Context, number: int, repo: str = 'sanic'):
         if not repo.startswith("sanic"):
             repo = f"sanic-{repo}"
         url, lookup_status = await self.lookup(number, repo)
@@ -43,4 +43,5 @@ class HelpCog(commands.Cog):
 
     @commands.command()
     async def help(self, ctx):
-        await ctx.send(await read_file('help.txt'))
+
+        await ctx.send()
