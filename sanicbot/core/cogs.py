@@ -8,7 +8,7 @@ from sanicbot.core.utils import failure_message, success_message
 class GitCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.org_url = f'https://github.com/sanic-org/'
+        self.org_url = 'https://github.com/sanic-org/'
 
     async def lookup(self, number: int, repo: str):
         """
