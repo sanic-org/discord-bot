@@ -1,0 +1,5 @@
+****Sanic Bot****
+Hello! I am SanicBot, a bot specially created for the Sanic Framework Discord server!
+***Argument Help:*** `[Mandatory]` `(Optional)`
+>>> ~~---------------~~:tools: Commands :tools:~~----------------~~
+**+issue** / **+i**: `[issue number]` `(repo)` - Retreives an issue from any repository in the Sanic organization github.
