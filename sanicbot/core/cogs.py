@@ -1,8 +1,8 @@
-import aiohttp
+import httpx
 from discord.ext import commands
 from discord.ext.commands import Context
 
-from sanicbot.core.utils import failure_message, success_message, read_file
+from sanicbot.core.utils import failure_message, success_message
 
 
 class GitCog(commands.Cog):
@@ -22,18 +22,19 @@ class GitCog(commands.Cog):
         :return: url, response_code
         """
         url = f'https://github.com/sanic-org/{repo}/issues/{number}'
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url) as response:
-                return str(response.url), response.status
+        async with httpx.AsyncClient() as client:
+            response = await client.get(url)
+            return str(response.url), response.status
 
-    @commands.command(aliases=['git', 'g'])
-    async def get_issue_or_pull(self, ctx: Context, number: int, repo: str = 'sanic'):
-        repo = 'sanic-' + repo if repo != 'sanic' else 'sanic'
+    @commands.command(aliases=['git', 'gh'])
+    async def retrieve_git(self, ctx: Context, number: int, repo: str = 'sanic'):
+        if not repo.startswith("sanic"):
+            repo = f"sanic-{repo}"
         url, lookup_status = await self.lookup(number, repo)
         if lookup_status == 200:
-            await success_message(ctx, 'Github issue or pull request in ' + repo + ' found.\n' + url)
+            await success_message(ctx, f'Github issue or pull request in {repo} found.\n{url}')
         else:
-            await failure_message(ctx, 'Github issue or pull request in ' + repo + ' has not been found.')
+            await failure_message(ctx, f'Github issue or pull request in {repo} has not been found.')
 
 
 class HelpCog(commands.Cog):
