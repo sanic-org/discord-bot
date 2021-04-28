@@ -24,7 +24,7 @@ class GitCog(commands.Cog):
         url = f'https://github.com/sanic-org/{repo}/issues/{number}'
         async with httpx.AsyncClient() as client:
             response = await client.get(url)
-            return str(response.url), response.status
+            return str(response.url), response.status_code
 
     @commands.command(aliases=['git', 'gh'])
     async def retrieve_issue(self, ctx: Context, number: int, repo: str = 'sanic'):
@@ -32,9 +32,9 @@ class GitCog(commands.Cog):
             repo = f"sanic-{repo}"
         url, lookup_status = await self.lookup(number, repo)
         if lookup_status == 200:
-            await success_message(ctx, f'Github issue or pull request in {repo} found.\n{url}')
+            await success_message(ctx, f'Issue in {repo} found.\n{url}')
         else:
-            await failure_message(ctx, f'Github issue or pull request in {repo} has not been found.')
+            await failure_message(ctx, f'Issue in {repo} has not been found.')
 
 
 class HelpCog(commands.Cog):
