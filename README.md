@@ -49,7 +49,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-SanicBot is a bot designed to make it easy to reference documentation and github pulls and issues.
+SanicBot is a bot designed to make it easy to reference documentation and Github pulls and issues.
 
 Use !help for user commands.
 
