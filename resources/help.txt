@@ -2,4 +2,4 @@
 Hello! I am SanicBot, a bot specially created for the Sanic Framework Discord server!
 ***Argument Help:*** `[Mandatory]` `(Optional)`
 >>> ~~---------------~~:tools: Commands :tools:~~----------------~~
-**+git** / **+g**: `[number]` `(repo)` - Retreives an issue or pull request from any repository in the Sanic organization github via number.
+**!git** / **!g**: `[number]` `(repo)` - Retreives an issue or pull request from any repository in the Sanic organization github via number.

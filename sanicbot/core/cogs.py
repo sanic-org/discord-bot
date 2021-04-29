@@ -6,9 +6,6 @@ from sanicbot.core.utils import failure_message, success_message
 
 
 class GitCog(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
-        self.org_url = 'https://github.com/sanic-org/'
 
     async def lookup(self, number: int, repo: str):
         """
@@ -38,10 +35,9 @@ class GitCog(commands.Cog):
 
 
 class HelpCog(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
 
     @commands.command()
     async def help(self, ctx):
+        with open('./resources/help.txt') as f:
+            await ctx.send(f.read())
 
-        await ctx.send()
