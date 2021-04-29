@@ -1,6 +1,7 @@
 import re
 
 import httpx
+from discord import Message
 from discord.ext import commands
 from discord.ext.commands import Context
 
@@ -9,6 +10,9 @@ from sanicbot.core.utils import failure_message, success_message
 
 class GitCog(commands.Cog):
     issue_pattern = re.compile(r"#(?P<issue_id>[1,2]\d{3})")
+
+    def __init__(self, bot):
+        self.bot = bot
 
     async def lookup(self, ctx: Context, number: int, repo: str):
         """
@@ -38,9 +42,15 @@ class GitCog(commands.Cog):
             repo = f"sanic-{repo}"
         await self.lookup(ctx, number, repo)
 
+    async def github_issue_message_listener(self, message: Message):
+        if not message.author.bot:
+            if match := self.issue_pattern.search(message.content):
+                await self.lookup(message.channel, int(match.group("issue_id")), 'sanic')
+            else:
+                await self.bot.process_commands(message)
+
 
 class HelpCog(commands.Cog):
-
     @commands.command()
     async def help(self, ctx):
         with open('./resources/help.txt') as f:
