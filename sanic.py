@@ -15,8 +15,7 @@ async def on_message(message):
 
 async def github_issue_listener(message: Message):
     if not message.author.bot:
-        match = git_cog.issue_pattern.search(message.content)
-        if match:
+        if match := git_cog.issue_pattern.search(message.content):
             await git_cog.lookup(message.channel, match.group("issue_id"), 'sanic')
         else:
             await bot.process_commands(message)
