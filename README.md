@@ -51,7 +51,7 @@
 
 SanicBot is a bot designed to make it easy to reference documentation and github pulls and issues.
 
-Use !help for user commands and !modhelp for moderator commands. 
+Use !help for user commands.
 
 
 <!-- GETTING STARTED -->
@@ -88,8 +88,7 @@ token=IOHhohohpgiJI.POUOUguGYIGUPGIGUIPgyio.iugYGGIUYUIGPOIHPH
 ```
 
 <!-- CONTRIBUTING -->
-## Contributing
-
+## Contributing                   
 Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
 1. Fork the Project
