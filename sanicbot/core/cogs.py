@@ -27,17 +27,19 @@ class GitCog(commands.Cog):
 
         :return: url, response_code
         """
-        url = f'https://github.com/sanic-org/{repo}/issues/{number}'
+        url = f"https://github.com/sanic-org/{repo}/issues/{number}"
         async with httpx.AsyncClient() as client:
             response = await client.get(url)
             if response.status_code == 200:
-                await success_message(ctx, f'Issue in {repo} has been found.\n{url}')
+                await success_message(ctx, f"Issue in {repo} has been found.\n{url}")
             else:
-                await failure_message(ctx, f'Issue in {repo} has not been found.')
+                await failure_message(ctx, f"Issue in {repo} has not been found.")
             return str(response.url), response.status_code
 
-    @commands.command(aliases=['git', 'gh'])
-    async def retrieve_github_issue(self, ctx: Context, number: int, repo: str = 'sanic'):
+    @commands.command(aliases=["git", "gh"])
+    async def retrieve_github_issue(
+        self, ctx: Context, number: int, repo: str = "sanic"
+    ):
         if not repo.startswith("sanic"):
             repo = f"sanic-{repo}"
         await self.lookup(ctx, number, repo)
@@ -45,7 +47,9 @@ class GitCog(commands.Cog):
     async def github_issue_message_listener(self, message: Message):
         if not message.author.bot:
             if match := self.issue_pattern.search(message.content):
-                await self.lookup(message.channel, int(match.group("issue_id")), 'sanic')
+                await self.lookup(
+                    message.channel, int(match.group("issue_id")), "sanic"
+                )
             else:
                 await self.bot.process_commands(message)
 
@@ -53,6 +57,5 @@ class GitCog(commands.Cog):
 class HelpCog(commands.Cog):
     @commands.command()
     async def help(self, ctx):
-        with open('./resources/help.txt') as f:
+        with open("./resources/help.txt") as f:
             await ctx.send(f.read())
-
