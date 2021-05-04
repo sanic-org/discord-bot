@@ -42,8 +42,6 @@
   * [Installation](#installation)
 * [Contributing](#contributing)
 * [License](#license)
-* [Acknowledgements](#acknowledgements)
-
 
 
 <!-- ABOUT THE PROJECT -->
@@ -102,11 +100,6 @@ Contributions are what make the open source community such an amazing place to b
 ## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
-
-<!-- ACKNOWLEDGEMENTS -->
-## Acknowledgements
-
-* Thanks to marchkarcz for improving leave messages for mobile.
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
