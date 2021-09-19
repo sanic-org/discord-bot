@@ -1,19 +1,24 @@
 from discord.ext import commands
-
-from sanicbot.core.cogs import HelpCog, GitCog
+from discord import Embed
 from sanicbot.core.config import config
+import aiohttp
+from asyncio import run as asynciorun
 
-bot = commands.Bot(help_command=None, command_prefix=None)
-git_cog = GitCog(bot)
+class embeddedHelpCommand(commands.MinimalHelpCommand):   # help command embedded, subclassed of the minimal help command
+    async def send_pages(self):
+        destination = self.get_destination()    #get where to send
+        with open("./resources/help.txt") as f:
+            embed = Embed(description=f.read()) # set desc as page  
+        await destination.send(embed=embed) # send embed
 
 
-@bot.event
-async def on_message(message):
-    await git_cog.github_issue_message_listener(message)
+async def startup():
+    bot = commands.Bot(help_command=embeddedHelpCommand(), command_prefix='!')
+    bot.load_extension('sanicbot.core.github')
 
+    async with aiohttp.ClientSession() as session:
+        bot.session = session   # set "session" as a botvar so you can access with bot.session anywhere you can touch bot
+        await bot.start(config['SANIC']['token'])
 
 if __name__ == '__main__':
-    bot.command_prefix = '!'
-    bot.add_cog(git_cog)
-    bot.add_cog(HelpCog(bot))
-    bot.run(config['SANIC']['token'], bot=True)
+    asynciorun(startup())
