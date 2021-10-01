@@ -16,4 +16,4 @@ if __name__ == '__main__':
     bot.command_prefix = '!'
     bot.add_cog(git_cog)
     bot.add_cog(HelpCog(bot))
-    bot.run(config['SANIC']['token'], bot=True)
+    bot.run(config['SANIC']['token'])
