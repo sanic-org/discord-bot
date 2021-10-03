@@ -44,6 +44,7 @@ class GitCog(commands.Cog):
             repo = f"sanic-{repo}"
         await self.lookup(ctx, number, repo)
 
+    @commands.Cog.listener('on_message')
     async def github_issue_message_listener(self, message: Message):
         if not message.author.bot:
             if match := self.issue_pattern.search(message.content):
