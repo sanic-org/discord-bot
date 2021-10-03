@@ -8,10 +8,10 @@ from discord.ext.commands import Context
 from sanicbot.core.utils import failure_message, success_message
 
 
-class GitCog(commands.Cog):
+class Git(commands.Cog):
     issue_pattern = re.compile(r"#(?P<issue_id>[1,2]\d{3})")
 
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 
     async def lookup(self, ctx: Context, number: int, repo: str):
@@ -51,12 +51,7 @@ class GitCog(commands.Cog):
                 await self.lookup(
                     message.channel, int(match.group("issue_id")), "sanic"
                 )
-            else:
-                await self.bot.process_commands(message)
 
 
-class HelpCog(commands.Cog):
-    @commands.command()
-    async def help(self, ctx):
-        with open("./resources/help.txt") as f:
-            await ctx.send(f.read())
+def setup(bot: commands.Bot):
+    bot.add_cog(Git(bot))
