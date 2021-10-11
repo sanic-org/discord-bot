@@ -5,13 +5,14 @@ from discord import Message
 from discord.ext import commands
 from discord.ext.commands import Context
 
+from sanicbot.core.config import config
 from sanicbot.core.utils import failure_message, success_message
 
 
-class GitCog(commands.Cog):
+class Git(commands.Cog):
     issue_pattern = re.compile(r"#(?P<issue_id>[1,2]\d{3})")
 
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 
     async def lookup(self, ctx: Context, number: int, repo: str):
@@ -44,6 +45,26 @@ class GitCog(commands.Cog):
             repo = f"sanic-{repo}"
         await self.lookup(ctx, number, repo)
 
+    @commands.command()
+    async def issue(self, ctx: Context, repo: str, title: str, *, content: str) -> None:
+        repo = repo if repo.startswith("sanic") else "sanic-" + repo
+        url = f"https://api.github.com/repos/sanic-org/{repo}/issues"
+        body = f"Forwarded from discord (Author: {ctx.author}, ID: {ctx.author.id})\n" + content
+        data = {
+            "title": title,
+            "body": body,
+        }
+        headers = {
+            "Accept": "application/vnd.github.v3+json",
+            "Authorization": "token " + config["SANIC"]["git_token"]
+        }
+        async with httpx.AsyncClient() as client:
+            response = await client.post(url, data=data, headers=headers)
+            if response.status_code == 200:
+                await success_message(ctx, "Issue created\n" + response.json()["url"])
+            else:
+                await failure_message(ctx, "An error occured: `" + response.json()["message"] + "`")
+
     @commands.Cog.listener('on_message')
     async def github_issue_message_listener(self, message: Message):
         if not message.author.bot:
@@ -51,12 +72,7 @@ class GitCog(commands.Cog):
                 await self.lookup(
                     message.channel, int(match.group("issue_id")), "sanic"
                 )
-            else:
-                await self.bot.process_commands(message)
 
 
-class HelpCog(commands.Cog):
-    @commands.command()
-    async def help(self, ctx):
-        with open("./resources/help.txt") as f:
-            await ctx.send(f.read())
+def setup(bot: commands.Bot):
+    bot.add_cog(Git(bot))
