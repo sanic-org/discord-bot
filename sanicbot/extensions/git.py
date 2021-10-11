@@ -47,7 +47,7 @@ class Git(commands.Cog):
 
     @commands.command()
     async def issue(self, ctx: Context, repo: str, title: str, *, content: str) -> None:
-        repo = repo if not repo.startswith("sanic") else "sanic-" + repo
+        repo = repo if repo.startswith("sanic") else "sanic-" + repo
         url = f"https://api.github.com/repos/sanic-org/{repo}/issues"
         body = f"Forwarded from discord (Author: {ctx.author}, ID: {ctx.author.id})\n" + content
         data = {
