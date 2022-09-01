@@ -83,6 +83,10 @@ pip3 install -r requirements.txt
 ```ini
 [SANIC]
 token=IOHhohohpgiJI.POUOUguGYIGUPGIGUIPgyio.iugYGGIUYUIGPOIHPH
+guild_id=1014440228808826940
+debug=True
+debug_channel_name=bot-debug
+voting_role_name=voting-2022
 ```
 
 <!-- CONTRIBUTING -->
