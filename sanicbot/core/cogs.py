@@ -28,9 +28,8 @@ class GitCog(commands.Cog):
         :return: url, response_code
         """
         url = f"https://github.com/sanic-org/{repo}/issues/{number}"
-        async with httpx.AsyncClient() as client:
-            response = await client.get(url)
-            if response.status_code == 200:
+        async with self.bot.httpclient.get(url) as response:
+            if response.status == 200:
                 await success_message(ctx, f"Issue in {repo} has been found.\n{url}")
             else:
                 await failure_message(ctx, f"Issue in {repo} has not been found.")
