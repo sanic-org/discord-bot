@@ -1,12 +1,14 @@
-import discord
+import nextcord
 import aiohttp
+import logging
 
-from discord.ext import commands
+from nextcord.ext import commands
 
 from sanicbot.core import cogs
 from sanicbot.core import exceptions
 from sanicbot.core.config import config
-from sanicbot.core.startup import startup
+from sanicbot.core import startup
+
 
 # Register cogs
 REGISTERED_COGS = [
@@ -14,26 +16,28 @@ REGISTERED_COGS = [
     cogs.GitCog
 ]
 
+if bool(config['SANIC']['debug']):
+    logging.basicConfig(level=logging.INFO)
 
 class SanicBot(commands.Bot):
-    DEBUG = config['SANIC']['debug']
+    DEBUG = bool(config['SANIC']['debug'])
+    httpclient = None
 
     def __init__(self, *args, **kwargs):
-        intents = discord.Intents.default()
+        intents = nextcord.Intents.all()
         intents.members = True
         super().__init__(*args, command_prefix='!', intents=intents, **kwargs)
 
-        self.httpclient = aiohttp.ClientSession()
-
-        for cog in REGISTERED_COGS:
-            self.add_cog(cog(self))
-
     # Server Events
     async def on_ready(self):
-        # Set the guild (limit the bot usage to a given guild_id)
+
+        # Setup clients and bindings
+        self.httpclient = aiohttp.ClientSession()
+
+        # Limit use to a specific guild
         self.guild = None
         for guild in self.guilds:
-            if guild.id == config['SANIC']['guild_id']
+            if str(guild.id) == config['SANIC']['guild_id']:
                 self.guild = guild
                 break
         if not self.guild:
@@ -42,11 +46,16 @@ class SanicBot(commands.Bot):
         # Initialize the server
         startup.setup_server(self, config)
 
+        # Register the cogs
+        for cog in REGISTERED_COGS:
+            self.add_cog(cog(self))
+
     async def on_message(self, message):
         await self.process_commands(message)
 
     async def close(self):
-        await self.httpclient.close()
+        if self.httpclient:
+            await self.httpclient.close()
         await super().close()
 
     async def on_member_join(self, member):
@@ -67,5 +76,6 @@ bot = SanicBot(help_command=None)
 if __name__ == '__main__':
     try:
         bot.run(config['SANIC']['token'])
-    except KeyboardInterrupt:    
-        pass
+    except KeyboardInterrupt:  
+        asyncio.get_event_loop().run_until_complete(bot.close())
+
