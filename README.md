@@ -49,9 +49,6 @@
 
 SanicBot is a bot designed to make it easy to reference documentation and Github pulls and issues.
 
-Use !help for user commands.
-
-
 <!-- GETTING STARTED -->
 ## Getting Started
 
