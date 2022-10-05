@@ -13,12 +13,10 @@ class GitCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    async def lookup(self, channel: nextcord.TextChannel, number: int, repo: str):
+    async def lookup(self, number: int, repo: str):
         """
         Lookup the issue and check if it exists within a repo found in the Sanic organization. Redirection to
         retrieve pull request is automatic due to the fact that Github issues them sequentially.
-
-        :param interaction: Nextcord Interaction.
 
         :param number: Issue number.
 
@@ -29,10 +27,8 @@ class GitCog(commands.Cog):
         url = f"https://github.com/sanic-org/{repo}/issues/{number}"
         async with self.bot.httpclient.get(url) as response:
             if response.status == 200:
-                await success_message(channel, f"Issue in {repo} has been found.\n{url}")
-            else:
-                await failure_message(channel, f"Issue in {repo} has not been found.")
-            return str(response.url), response.status
+                return success_message(f"Issue in {repo} has been found.\n{url}")
+            return failure_message(f"Issue in {repo} has not been found.")
 
     @nextcord.slash_command(name='issue', description='Lookup an issue', guild_ids=[int(config['SANIC']['guild_id'])])
     async def retrieve_github_issue(self, 
@@ -42,15 +38,13 @@ class GitCog(commands.Cog):
     ):
         if not repo.startswith("sanic"):
             repo = f"sanic-{repo}"
-        await self.lookup(interaction.channel, number, repo)
+        await interaction.response.send_message(await self.lookup(number, repo))
 
     @commands.Cog.listener('on_message')
     async def github_issue_message_listener(self, message: nextcord.Message):
         if not message.author.bot:
             if match := self.issue_pattern.search(message.content):
-                await self.lookup(
-                    message.channel, int(match.group("issue_id")), "sanic"
-                )
+                await message.channel.send(await self.lookup(int(match.group("issue_id")), "sanic"))
             else:
                 await self.bot.process_commands(message)
 
