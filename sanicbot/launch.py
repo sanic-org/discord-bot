@@ -4,7 +4,7 @@ import logging
 
 from nextcord.ext import commands
 
-from sanicbot.core import cogs
+from sanicbot import cogs
 from sanicbot.core import exceptions
 from sanicbot.core.config import config
 from sanicbot.core import startup
@@ -29,11 +29,7 @@ class SanicBot(commands.Bot):
         super().__init__(*args, command_prefix='!', intents=intents, **kwargs)
 
     # Server Events
-    async def on_ready(self):
-
-        # Setup clients and bindings
-        self.httpclient = aiohttp.ClientSession()
-
+    async def on_connect(self):
         # Limit use to a specific guild
         self.guild = None
         for guild in self.guilds:
@@ -43,20 +39,28 @@ class SanicBot(commands.Bot):
         if not self.guild:
             raise exceptions.InvalidGuild()
 
-        # Initialize the server
-        startup.setup_server(self, config)
-
         # Register the cogs
         for cog in REGISTERED_COGS:
             self.add_cog(cog(self))
+        self.add_all_cog_commands()
 
-    async def on_message(self, message):
-        await self.process_commands(message)
+        await super().on_connect()
+
+    async def on_ready(self):
+
+        # Setup clients and bindings
+        self.httpclient = aiohttp.ClientSession()
+
+        # Initialize the server
+        startup.setup_server(self, config)
 
     async def close(self):
         if self.httpclient:
             await self.httpclient.close()
         await super().close()
+
+    async def on_message(self, message):
+        await self.process_commands(message)
 
     async def on_member_join(self, member):
         pass
@@ -65,7 +69,6 @@ class SanicBot(commands.Bot):
     async def logit(self, message):
         if self.DEBUG:
             await self.debug_channel.send(message)
-        print(message)
 
 
 # Initialize the bot
