@@ -12,8 +12,8 @@ from sanicbot.core import startup
 
 # Register cogs
 REGISTERED_COGS = [
-    cogs.HelpCog,
-    cogs.GitCog
+    cogs.GitCog,
+    cogs.RTDCog
 ]
 
 if bool(config['SANIC']['debug']):
@@ -56,7 +56,7 @@ class SanicBot(commands.Bot):
 
     async def close(self):
         if self.httpclient:
-            await self.httpclient.close()
+            await self.httpclient.aclose()
         await super().close()
 
     async def on_message(self, message):
