@@ -29,7 +29,7 @@ class SanicBot(commands.Bot):
         super().__init__(*args, command_prefix='!', intents=intents, **kwargs)
 
     # Server Events
-    async def on_connect(self):
+    async def on_connect(self) -> None:
         # Limit use to a specific guild
         self.guild = None
         for guild in self.guilds:
@@ -46,7 +46,7 @@ class SanicBot(commands.Bot):
 
         await super().on_connect()
 
-    async def on_ready(self):
+    async def on_ready(self) -> None:
 
         # Setup clients and bindings
         self.httpclient = httpx.AsyncClient()
@@ -54,21 +54,22 @@ class SanicBot(commands.Bot):
         # Initialize the server
         startup.setup_server(self, config)
 
-    async def close(self):
+    async def close(self) -> None:
         if self.httpclient:
             await self.httpclient.aclose()
         await super().close()
 
-    async def on_message(self, message):
+    async def on_message(self, message: nextcord.Message) -> None:
         await self.process_commands(message)
 
-    async def on_member_join(self, member):
+    async def on_member_join(self, member: nextcord.Member) -> None:
         pass
 
     # Helpers
-    async def logit(self, message):
+    async def logit(self, message: str) -> None:
         if self.DEBUG:
             await self.debug_channel.send(message)
+            logger.debug(message)
 
 
 # Initialize the bot
