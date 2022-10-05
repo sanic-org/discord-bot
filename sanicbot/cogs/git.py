@@ -25,10 +25,10 @@ class GitCog(commands.Cog):
         :return: url, response_code
         """
         url = f"https://github.com/sanic-org/{repo}/issues/{number}"
-        async with self.bot.httpclient.get(url) as response:
-            if response.status == 200:
-                return success_message(f"Issue in {repo} has been found.\n{url}")
-            return failure_message(f"Issue in {repo} has not been found.")
+        response = await self.bot.httpclient.get(url):
+        if response.status == 200:
+            return success_message(f"Issue in {repo} has been found.\n{url}")
+        return failure_message(f"Issue in {repo} has not been found.")
 
     @nextcord.slash_command(name='issue', description='Lookup an issue', guild_ids=[int(config['SANIC']['guild_id'])])
     async def retrieve_github_issue(self, 

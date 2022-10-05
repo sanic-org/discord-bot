@@ -1,5 +1,5 @@
 import nextcord
-import aiohttp
+import httpx
 import logging
 
 from nextcord.ext import commands
@@ -49,7 +49,7 @@ class SanicBot(commands.Bot):
     async def on_ready(self):
 
         # Setup clients and bindings
-        self.httpclient = aiohttp.ClientSession()
+        self.httpclient = httpx.AsyncClient()
 
         # Initialize the server
         startup.setup_server(self, config)
