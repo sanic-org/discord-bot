@@ -81,6 +81,7 @@ pip3 install -r requirements.txt
 [SANIC]
 token=IOHhohohpgiJI.POUOUguGYIGUPGIGUIPgyio.iugYGGIUYUIGPOIHPH
 guild_id=1014440228808826940
+bot_name=SanicBot
 debug=True
 ```
 
