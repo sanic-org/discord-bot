@@ -7,7 +7,6 @@ from nextcord.ext import commands
 from sanicbot import cogs
 from sanicbot.core import exceptions
 from sanicbot.core.config import config
-from sanicbot.core import startup
 
 
 # Register cogs
@@ -52,7 +51,7 @@ class SanicBot(commands.Bot):
         self.httpclient = httpx.AsyncClient()
 
         # Initialize the server
-        startup.setup_server(self, config)
+        # startup.setup_server(self, config)
 
     async def close(self) -> None:
         if self.httpclient:
