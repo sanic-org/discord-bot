@@ -85,6 +85,12 @@ bot_name=SanicBot
 debug=True
 ```
 
+* Launch the bot
+
+```sh
+python3 -m sanic.launch
+```
+
 <!-- CONTRIBUTING -->
 ## Contributing                   
 Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
