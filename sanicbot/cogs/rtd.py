@@ -25,7 +25,7 @@ class RTDCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @nextcord.slash_command(name='rtd', description='Search the documentation', guild_ids=[int(config['SANIC']['guild_id'])])
+    @nextcord.slash_command(name='rtd', description='Search readthedocs.io for a search term', guild_ids=[int(config['SANIC']['guild_id'])])
     async def cmd_rtm(self, 
         interaction: nextcord.Interaction,
         term: str = nextcord.SlashOption(name='term', description='The term to search for', required=True), 

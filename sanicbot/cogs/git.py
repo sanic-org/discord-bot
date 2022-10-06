@@ -30,7 +30,7 @@ class GitCog(commands.Cog):
             return success_message(f"Issue in {repo} has been found.\n{url}")
         return failure_message(f"Issue in {repo} has not been found.")
 
-    @nextcord.slash_command(name='issue', description='Lookup an issue', guild_ids=[int(config['SANIC']['guild_id'])])
+    @nextcord.slash_command(name='issue', description='Lookup an issue on Github by issue number', guild_ids=[int(config['SANIC']['guild_id'])])
     async def retrieve_github_issue(self, 
         interaction: nextcord.Interaction, 
         number: int = nextcord.SlashOption(name='number', required=True, description='The issue number to lookup.'), 
