@@ -15,11 +15,11 @@ REGISTERED_COGS = [
     cogs.RTDCog
 ]
 
-# Set log level
+# Set root log level
 logging.basicConfig(level=logging.INFO)
 
 class SanicBot(commands.Bot):
-    DEBUG = bool(config['SANIC']['debug'])
+    DEBUG = config['SANIC'].getboolean('debug', False)
     httpclient = None
 
     def __init__(self, *args, **kwargs):
@@ -27,7 +27,7 @@ class SanicBot(commands.Bot):
         intents.members = True
 
         self.logger = logging.getLogger(config['SANIC']['BOT_NAME'])
-        self.logger.setLevel(logging.DEBUG if config['SANIC'].getboolean('debug', False) else logging.INFO)
+        self.logger.setLevel(logging.DEBUG if self.DEBUG else logging.INFO)
 
         super().__init__(*args, command_prefix='!', intents=intents, **kwargs)
 
