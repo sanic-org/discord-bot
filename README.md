@@ -49,9 +49,6 @@
 
 SanicBot is a bot designed to make it easy to reference documentation and Github pulls and issues.
 
-Use !help for user commands.
-
-
 <!-- GETTING STARTED -->
 ## Getting Started
 
@@ -83,6 +80,15 @@ pip3 install -r requirements.txt
 ```ini
 [SANIC]
 token=IOHhohohpgiJI.POUOUguGYIGUPGIGUIPgyio.iugYGGIUYUIGPOIHPH
+guild_id=1014440228808826940
+bot_name=SanicBot
+debug=True
+```
+
+* Launch the bot
+
+```sh
+python3 -m sanicbot.launch
 ```
 
 <!-- CONTRIBUTING -->

@@ -1,0 +1,3 @@
+
+class InvalidGuild(Exception): pass
+
