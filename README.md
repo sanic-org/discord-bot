@@ -88,7 +88,7 @@ debug=True
 * Launch the bot
 
 ```sh
-python3 -m sanic.launch
+python3 -m sanicbot.launch
 ```
 
 <!-- CONTRIBUTING -->
