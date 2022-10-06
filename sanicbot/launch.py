@@ -16,7 +16,7 @@ REGISTERED_COGS = [
 ]
 
 # Set log level
-logging.basicConfig(level=logging.DEBUG if config['SANIC'].getboolean('debug', False) else logging.INFO)
+logging.basicConfig(level=logging.INFO)
 
 class SanicBot(commands.Bot):
     DEBUG = bool(config['SANIC']['debug'])
@@ -25,6 +25,10 @@ class SanicBot(commands.Bot):
     def __init__(self, *args, **kwargs):
         intents = nextcord.Intents.all()
         intents.members = True
+
+        self.logger = logging.getLogger(config['SANIC']['BOT_NAME'])
+        self.logger.setLevel(logging.DEBUG if config['SANIC'].getboolean('debug', False) else logging.INFO)
+
         super().__init__(*args, command_prefix='!', intents=intents, **kwargs)
 
     # Server Events
@@ -51,7 +55,8 @@ class SanicBot(commands.Bot):
         self.httpclient = httpx.AsyncClient()
 
         # Initialize the server
-        # startup.setup_server(self, config)
+        
+        self.logger.debug('Starting in DEBUG mode.')
 
     async def close(self) -> None:
         if self.httpclient:
