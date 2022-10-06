@@ -16,8 +16,8 @@ REGISTERED_COGS = [
     cogs.RTDCog
 ]
 
-if bool(config['SANIC']['debug']):
-    logging.basicConfig(level=logging.INFO)
+# Set log level
+logging.basicConfig(level=logging.DEBUG if config['SANIC'].getboolean('debug', False) else logging.INFO)
 
 class SanicBot(commands.Bot):
     DEBUG = bool(config['SANIC']['debug'])
@@ -64,12 +64,6 @@ class SanicBot(commands.Bot):
 
     async def on_member_join(self, member: nextcord.Member) -> None:
         pass
-
-    # Helpers
-    async def logit(self, message: str) -> None:
-        if self.DEBUG:
-            await self.debug_channel.send(message)
-            logger.debug(message)
 
 
 # Initialize the bot
